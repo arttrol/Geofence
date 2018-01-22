@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Geofence</string>
+
+    <!--MainActivity-->
+    <string name="label_geofence_parameters">Geofence parameters:</string>
+    <string name="label_radius">Radius (meters)</string>
+    <string name="label_latitude">Latitude</string>
+    <string name="label_longitude">Longitude</string>
+    <string name="hint_latitude">-90..90</string>
+    <string name="hint_longitude">-180..180</string>
+    <string name="btn_apply">Apply</string>
+    <string name="snackbar_geofence_info">"Lat : %.4f,   Lon:%.4f \nRadius : %.2f m."</string>
+    <string name="snackbar_fill_all_fields">Please fill in all fields</string>
+
+    <!--Permissions-->
+    <string name="snackbar_message_enable_location_access">Please enable location access in settings for accurate work of application</string>
+    <string name="snackbar_btn_settings">Settings</string>
+
+    <!--Notification-->
+    <string name="notification_text_return_to_app">Click notification to return to app</string>
 </resources>
