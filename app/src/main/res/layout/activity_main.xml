@@ -6,98 +6,154 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.artem.geofence.activity.MainActivity"
-    tools:ignore="RtlCompat"
-    tools:layout_editor_absoluteY="81dp">
+    tools:ignore="RtlCompat">
 
     <TextView
-        android:id="@+id/textViewTitle"
+        android:id="@+id/text_view_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/padding_default"
         android:layout_marginTop="16dp"
         android:text="@string/label_geofence_parameters"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_label_status" />
+
+    <TextView
+        android:id="@+id/text_view_label_latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_default"
+        android:layout_marginTop="@dimen/padding_default"
+        android:text="@string/label_latitude"
+        android:textSize="@dimen/font_size_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_title" />
+
+    <TextView
+        android:id="@+id/text_view_label_longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_longitude"
+        android:textSize="@dimen/font_size_label"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_longitude"
+        app:layout_constraintTop_toTopOf="@+id/text_view_label_latitude" />
+
+    <TextView
+        android:id="@+id/text_view_label_radius"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_radius"
+        android:textSize="@dimen/font_size_label"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_radius"
+        app:layout_constraintTop_toTopOf="@+id/text_view_label_longitude" />
+
+    <EditText
+        android:id="@+id/edit_text_latitude"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_default_half"
+        android:layout_marginStart="@dimen/padding_default"
+        android:ems="10"
+        android:hint="@string/hint_latitude"
+        android:inputType="numberSigned|numberDecimal"
+        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_longitude"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_longitude"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="50.0" />
+
+    <EditText
+        android:id="@+id/edit_text_longitude"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_default_half"
+        android:layout_marginStart="@dimen/padding_default_half"
+        android:ems="10"
+        android:hint="@string/hint_longitude"
+        android:inputType="numberSigned|numberDecimal"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_radius"
+        app:layout_constraintStart_toEndOf="@+id/edit_text_latitude"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_label_latitude"
+        tools:text="30.0" />
+
+    <EditText
+        android:id="@+id/edit_text_radius"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_default"
+        android:layout_marginStart="@dimen/padding_default_half"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_longitude"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/edit_text_longitude"
+        tools:text="100" />
+
+    <Button
+        android:id="@+id/button_apply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_default"
+        android:layout_marginTop="@dimen/padding_default"
+        android:text="@string/btn_apply"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_wi_fi" />
+
+    <TextView
+        android:id="@+id/text_view_label_wi_fi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_default"
+        android:layout_marginTop="@dimen/padding_default"
+        android:text="@string/label_wifi_name"
+        android:textSize="@dimen/font_size_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_latitude" />
+
+    <EditText
+        android:id="@+id/edit_text_wi_fi"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_default"
+        android:layout_marginStart="@dimen/padding_default"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_label_wi_fi"
+        tools:text="Name" />
+
+    <TextView
+        android:id="@+id/text_view_label_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/label_status"
+        app:layout_constraintEnd_toStartOf="@+id/text_view_status"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewLabelLatitude"
+        android:id="@+id/text_view_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/label_latitude"
-        android:textSize="12sp"
+        tools:text="Inside"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_view_label_status"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/text_view_label_status" />
+
+    <TextView
+        android:id="@+id/text_view_log"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_default"
+        android:layout_marginStart="@dimen/padding_default"
+        android:layout_marginTop="@dimen/padding_default"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
-
-    <TextView
-        android:id="@+id/textViewLabelLongitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_longitude"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/editTextLongitude"
-        app:layout_constraintTop_toTopOf="@+id/textViewLabelLatitude" />
-
-    <TextView
-        android:id="@+id/textViewLabelRadius"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_radius"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/editTextRadius"
-        app:layout_constraintTop_toTopOf="@+id/textViewLabelLongitude" />
-
-    <EditText
-        android:id="@+id/editTextLatitude"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
-        android:ems="10"
-        android:hint="@string/hint_latitude"
-        android:inputType="numberDecimal"
-        android:text="50.0"
-        app:layout_constraintBaseline_toBaselineOf="@+id/editTextLongitude"
-        app:layout_constraintEnd_toStartOf="@+id/editTextLongitude"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextLongitude"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="@string/hint_longitude"
-        android:inputType="numberDecimal"
-        android:text="30.0"
-        app:layout_constraintEnd_toStartOf="@+id/editTextRadius"
-        app:layout_constraintStart_toEndOf="@+id/editTextLatitude"
-        app:layout_constraintTop_toBottomOf="@+id/textViewLabelLatitude" />
-
-    <EditText
-        android:id="@+id/editTextRadius"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:text="100"
-        app:layout_constraintBaseline_toBaselineOf="@+id/editTextLongitude"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextLongitude" />
-
-    <Button
-        android:id="@+id/buttonApply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/btn_apply"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextRadius" />
+        app:layout_constraintTop_toBottomOf="@+id/button_apply"
+        tools:text="log" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.example.artem.geofence.intent;
+package com.example.artem.geofence.service;
 
 import android.app.IntentService;
 import android.app.NotificationChannel;
@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.example.artem.geofence.GeofenceErrorMessages;
 import com.example.artem.geofence.R;
 import com.example.artem.geofence.activity.MainActivity;
 import com.google.android.gms.location.Geofence;
@@ -21,6 +22,7 @@ import static android.content.ContentValues.TAG;
 
 /**
  * Created by Artem on 22.01.18.
+ * This class handle transitions for current geofences
  */
 
 public class GeofenceTransitionsIntentService extends IntentService {
@@ -33,22 +35,22 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
     protected void onHandleIntent(Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
-        Log.e(TAG, "onHandleIntent: " + intent);
         if (geofencingEvent.hasError()) {
-            // TODO: High 23.01.18 handle errors
+            String errorMessage = GeofenceErrorMessages.getErrorString(this, geofencingEvent.getErrorCode());
+            Log.e(TAG, errorMessage);
             return;
         }
 
         // Get the transition type.
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
-
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
 
             boolean isInside = geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER;
-            sendNotification(isInside ? "inside" : "outside", isInside ? Color.GREEN : Color.RED);
+            sendNotification(getString(isInside ? R.string.status_inside : R.string.status_outside),
+                    isInside ? Color.GREEN : Color.RED);
         } else {
-            Log.e(TAG, "Transition invalid type" + geofenceTransition);
+            Log.e(TAG, "Transition invalid type " + geofenceTransition);
         }
 
     }
@@ -56,6 +58,11 @@ public class GeofenceTransitionsIntentService extends IntentService {
     private void sendNotification(String notificationTitle, int color) {
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (mNotificationManager == null) {
+            Log.e(TAG, "sendNotification. mNotificationManager is null");
+            return;
+        }
 
         // Android O requires a Notification Channel.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
