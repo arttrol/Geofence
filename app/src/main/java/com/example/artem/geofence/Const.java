@@ -11,22 +11,16 @@ public interface Const {
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    long LOCATION_UPDATE_INTERVAL = 4 * 1000; // 4 sec
+    long LOCATION_UPDATE_INTERVAL = 10 * 1000; // 10 sec
 
     /**
      * The fastest rate for active location updates. Updates will never be more frequent
      * than this value, but they may be less frequent.
      */
-    long LOCATION_FASTEST_UPDATE_INTERVAL = 2 * 1000; // 2 sec
-
-    /**
-     * The max time before batched results are delivered by location services. Results may be
-     * delivered sooner than this interval.
-     */
-    long LOCATION_MAX_WAIT_TIME = LOCATION_UPDATE_INTERVAL * 2;
+    long LOCATION_FASTEST_UPDATE_INTERVAL = 5 * 1000; // 5 sec
 
     float DEF_LATITUDE = 50.45f;
     float DEF_LONGITUDE = 30.524f;
-    float DEF_RADIUS = 100f;
-    String DEF_WIFI_NAME = "Xiaomi_FF24_5G";
+    float DEF_RADIUS = 11000f;
+    String DEF_WIFI_NAME = "WiredSSID";//"Xiaomi_FF24";
 }
