@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 
-import com.example.artem.geofence.model.GeofenceAreaModel;
 import com.example.artem.geofence.Utils;
+import com.example.artem.geofence.model.GeofenceAreaModelImpl;
 
 /**
  * Created by Artem on 23.01.18.
@@ -28,7 +28,7 @@ public class WiFiBroadcastReceiver extends BroadcastReceiver {
                 wiFiName = Utils.getWiFiName(context);
             }
 
-            new GeofenceAreaModel(context).setConnectedToWiFi(wiFiName);
+            new GeofenceAreaModelImpl(context).setConnectedWiFiName(wiFiName);
         }
 
     }

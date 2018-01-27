@@ -1,5 +1,6 @@
 package com.example.artem.geofence.view;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.StringRes;
@@ -13,8 +14,6 @@ import com.example.artem.geofence.model.GeofenceArea;
 
 public interface MainActivityView {
 
-    Context getContext();
-
     void showGeofenceAreaStatus(boolean inside);
 
     void populateGeofenceAreaParams(GeofenceArea geofenceArea);
@@ -25,13 +24,13 @@ public interface MainActivityView {
 
     GeofenceArea readGeofenceArea();
 
-    void showSnackbar(@StringRes int stringResId);
-
-    void showSnackbar(String message);
+    void showSnackbar(@StringRes int stringResId, Object... args);
 
     void checkLocationSettings();
 
     void checkLocationPermissions();
 
     View getSnackbarContainer();
+
+    PendingIntent getGeofencePendingIntent();
 }

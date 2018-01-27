@@ -1,7 +1,9 @@
 package com.example.artem.geofence.view.activity;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.graphics.Color;
@@ -9,6 +11,7 @@ import android.location.Location;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -19,11 +22,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.artem.geofence.GeofenceApplication;
 import com.example.artem.geofence.R;
+import com.example.artem.geofence.Utils;
 import com.example.artem.geofence.broadcast.WiFiBroadcastReceiver;
 import com.example.artem.geofence.model.GeofenceArea;
 import com.example.artem.geofence.presenter.Presenter;
-import com.example.artem.geofence.presenter.PresenterImpl;
+import com.example.artem.geofence.service.GeofenceTransitionsIntentService;
 import com.example.artem.geofence.view.MainActivityView;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationServices;
@@ -35,6 +40,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.karumi.dexter.Dexter;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -43,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     private static final String TAG = "MainActivity";
     private static final int REQUEST_CHECK_SETTINGS = 100;
+
+    @Inject
+    Presenter mPresenter;
 
     @BindView(R.id.activity_main)
     View mContainer;
@@ -65,13 +75,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     @BindView(R.id.text_view_log)
     TextView mTextViewLog;
 
-    private Presenter mPresenter;
     /**
      * Since api version 26 apps can no longer register broadcast receivers for implicit
      * broadcasts in their manifest. We have to register it from context
      * https://developer.android.com/guide/components/broadcast-exceptions.html
      */
     private WiFiBroadcastReceiver wiFiBroadcastReceiver;
+    private PendingIntent mGeofencePendingIntent;
 
     @OnClick(R.id.button_apply)
     void onApplyClick() {
@@ -83,8 +93,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        GeofenceApplication.getAppComponent().inject(this);
 
-        mPresenter = new PresenterImpl(this);
+        mPresenter.setView(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             wiFiBroadcastReceiver = new WiFiBroadcastReceiver();
@@ -94,8 +105,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     @Override
     protected void onStart() {
         super.onStart();
-        mPresenter.onStart();
+        checkConnectedWiFi();
         startWiFiBroadcast();
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .registerOnSharedPreferenceChangeListener(mPresenter);
     }
 
     @Override
@@ -106,20 +119,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     protected void onPause() {
-        mPresenter.onPause();
         super.onPause();
+        mPresenter.onPause();
     }
 
     @Override
     protected void onStop() {
-        stopWiFiBroadcast();
-        mPresenter.onStop();
         super.onStop();
-    }
-
-    @Override
-    public Context getContext() {
-        return this;
+        stopWiFiBroadcast();
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(mPresenter);
     }
 
     /**
@@ -175,13 +184,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     @Override
-    public void showSnackbar(@StringRes int resId) {
-        showSnackbar(getString(resId));
-    }
-
-    @Override
-    public void showSnackbar(String message) {
-        Snackbar.make(getSnackbarContainer(), message, Snackbar.LENGTH_LONG).show();
+    public void showSnackbar(@StringRes int resId, Object... args) {
+        Snackbar.make(getSnackbarContainer(), getString(resId, args), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -220,6 +224,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             if (imm != null) imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    @Override
+    public PendingIntent getGeofencePendingIntent() {
+        // Reuse the PendingIntent if we already have it.
+        if (mGeofencePendingIntent != null) {
+            return mGeofencePendingIntent;
+        }
+        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
+        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
+        // calling checkLocationPermissions() and removeGeofences().
+        mGeofencePendingIntent = PendingIntent.getService(getApplicationContext(), 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        return mGeofencePendingIntent;
+    }
+
+    private void checkConnectedWiFi() {
+        String wiFiName = Utils.getWiFiName(this);
+        mPresenter.setConnectedToWiFi(wiFiName);
     }
 
     private void startWiFiBroadcast() {

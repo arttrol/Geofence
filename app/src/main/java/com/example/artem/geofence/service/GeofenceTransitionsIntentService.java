@@ -4,8 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
-import com.example.artem.geofence.model.GeofenceAreaModel;
 import com.example.artem.geofence.GeofenceErrorMessages;
+import com.example.artem.geofence.model.GeofenceAreaModelImpl;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
@@ -25,7 +25,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent.hasError()) {
-            String errorMessage = GeofenceErrorMessages.getErrorString(this, geofencingEvent.getErrorCode());
+            String errorMessage = getString(GeofenceErrorMessages.getErrorStringRes(geofencingEvent.getErrorCode()));
             Log.e(TAG, errorMessage);
             return;
         }
@@ -34,7 +34,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
         Log.d(TAG, "onHandleIntent: " + geofenceTransition);
 
-        new GeofenceAreaModel(getApplicationContext()).setInGeoArea(
+        new GeofenceAreaModelImpl(getApplicationContext()).setInGeoArea(
                 geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER);
     }
 

@@ -16,8 +16,7 @@
 
 package com.example.artem.geofence;
 
-import android.content.Context;
-import android.content.res.Resources;
+import android.support.annotation.StringRes;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.GeofenceStatusCodes;
@@ -29,33 +28,35 @@ public class GeofenceErrorMessages {
     /**
      * Prevents instantiation.
      */
-    private GeofenceErrorMessages() {}
+    private GeofenceErrorMessages() {
+    }
 
     /**
      * Returns the error string for a geofencing exception.
      */
-    public static String getErrorString(Context context, Exception e) {
+    public static @StringRes
+    int getErrorStringRes(Exception e) {
         if (e instanceof ApiException) {
-            return getErrorString(context, ((ApiException) e).getStatusCode());
+            return getErrorStringRes(((ApiException) e).getStatusCode());
         } else {
-            return context.getResources().getString(R.string.error_geofence_unknown);
+            return R.string.error_geofence_unknown;
         }
     }
 
     /**
      * Returns the error string for a geofencing error code.
      */
-    public static String getErrorString(Context context, int errorCode) {
-        Resources mResources = context.getResources();
+    public static @StringRes
+    int getErrorStringRes(int errorCode) {
         switch (errorCode) {
             case GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE:
-                return mResources.getString(R.string.error_geofence_not_available);
+                return R.string.error_geofence_not_available;
             case GeofenceStatusCodes.GEOFENCE_TOO_MANY_GEOFENCES:
-                return mResources.getString(R.string.error_geofence_too_many_geofences);
+                return R.string.error_geofence_too_many_geofences;
             case GeofenceStatusCodes.GEOFENCE_TOO_MANY_PENDING_INTENTS:
-                return mResources.getString(R.string.error_geofence_too_many_pending_intents);
+                return R.string.error_geofence_too_many_pending_intents;
             default:
-                return mResources.getString(R.string.error_geofence_unknown);
+                return R.string.error_geofence_unknown;
         }
     }
 }

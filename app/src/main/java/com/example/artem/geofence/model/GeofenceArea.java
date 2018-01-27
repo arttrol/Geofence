@@ -6,6 +6,7 @@ package com.example.artem.geofence.model;
  * and specific Wifi network name.
  */
 
+@SuppressWarnings("WeakerAccess")
 public class GeofenceArea {
     private float latitude;
     private float longitude;
