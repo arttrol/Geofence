@@ -27,7 +27,11 @@ public class GeofenceApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        sAppComponent = DaggerAppComponent.builder()
+        sAppComponent = buildComponent();
+    }
+
+    protected AppComponent buildComponent() {
+        return DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();
     }

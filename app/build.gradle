@@ -16,6 +16,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 ext {
@@ -27,6 +32,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    testImplementation 'org.mockito:mockito-core:2.12.0'
+    testImplementation 'org.robolectric:robolectric:3.6.1'
+    testImplementation 'com.android.support.test:runner:1.0.1'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:$supportVersion"
@@ -41,5 +49,6 @@ dependencies {
 
     implementation "com.google.dagger:dagger:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    testAnnotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
 }
